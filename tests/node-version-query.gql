@@ -1,7 +1,9 @@
 query {
     node {
-       base(version: "20-alpine3.17") {
-          version
+       withVersion(version: "20-alpine3.17") {
+          container {
+              withExec(args: ["-v"]) { stdout }
+          }
        }
     }
 }
