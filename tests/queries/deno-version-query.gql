@@ -1,0 +1,9 @@
+query {
+    deno {
+        withVersion(version: "alpine") {
+            run(args: ["--version"]) {
+                stdout
+            }
+        }
+    }
+}
