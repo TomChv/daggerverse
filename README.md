@@ -2,12 +2,18 @@
 
 ## Node package
 
-A base package to build on top of it.
+A basic node package to manage a node project
 
 ### Try it
 
 ```shell
 cd node
 
-dagger query --doc ../node-version-query.gql
+../tests/node-exec.sh lint
+
+../tests/node-exec.sh version
+
+../tests/node-exec.sh test
+
+../tests/node-exec.sh build
 ```

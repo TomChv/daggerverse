@@ -5,34 +5,44 @@ import (
 )
 
 type Node struct {
-	Version string
-	Cache   bool
+	Ctr *Container
 }
 
+// WithVersion returns Node container with given image version.
 func (n *Node) WithVersion(version string) *Node {
-	n.Version = version
+	if n.Ctr == nil {
+		n.Ctr = dag.Container()
+	}
+
+	n.Ctr = n.Ctr.
+		From(fmt.Sprintf("node:%s", version)).
+		WithEntrypoint([]string{"node"})
 
 	return n
 }
 
-func (n *Node) Container() *Container {
-	version := "latest"
-	if n.Version != "" {
-		version = n.Version
-	}
+// WithContainer returns Node container with the given container.
+func (n *Node) WithContainer(ctr *Container) *Node {
+	n.Ctr = ctr
 
-	ctr := dag.Container().
-		From(fmt.Sprintf("node:%s", version)).
-		WithEntrypoint([]string{"node"})
-
-	return ctr
+	return n
 }
 
-// NodeCache adds node_modules into dagger cache.
-// This path to target the node_modules directory
-func (ctr *Container) NodeCache(path string) *Container {
-	return ctr.
+// Container returns Node container.
+func (n *Node) Container() *Container {
+	return n.Ctr
+}
+
+// WithSource returns the Node container with source and cache set in it.
+func (n *Node) WithSource(source *Directory) *Node {
+	workdir := "/src"
+
+	n.Ctr = n.Ctr.
+		WithWorkdir("/src").
+		WithMountedDirectory("/src", source).
 		WithMountedCache(
-			fmt.Sprintf("%s/node_modules", path),
+			fmt.Sprintf("%s/node_modules", workdir),
 			dag.CacheVolume("node-modules"))
+
+	return n
 }

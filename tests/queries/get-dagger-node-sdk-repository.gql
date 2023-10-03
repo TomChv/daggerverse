@@ -1,0 +1,11 @@
+query  {
+    git(url: "github.com/dagger/dagger") {
+        branch(name: "main") {
+            tree {
+                directory(path: "sdk/nodejs") {
+                    id
+                }
+            }
+        }
+    }
+}

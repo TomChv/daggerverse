@@ -1,0 +1,14 @@
+query install ($dirID: DirectoryID!) {
+    node {
+        withVersion(version: "20-alpine3.17") {
+            withYarn {
+                withSource(source: $dirID) {
+                    build {
+                        entries
+                    }
+                }
+            }
+        }
+    }
+
+}
