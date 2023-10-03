@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 )
 
@@ -30,15 +29,10 @@ func (n *Node) Container() *Container {
 }
 
 // NodeCache adds node_modules into dagger cache.
-// This expects that container workdir is set to source directory.
-func (ctr *Container) NodeCache(ctx context.Context) (*Container, error) {
-	workdir, err := ctr.Workdir(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+// This path to target the node_modules directory
+func (ctr *Container) NodeCache(path string) *Container {
 	return ctr.
 		WithMountedCache(
-			fmt.Sprintf("%s/workdir", workdir),
-			dag.CacheVolume("node-modules")), nil
+			fmt.Sprintf("%s/node_modules", path),
+			dag.CacheVolume("node-modules"))
 }
