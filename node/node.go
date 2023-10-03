@@ -10,13 +10,13 @@ type Node struct {
 	Cache   bool
 }
 
-func (n *Node) WithVersion(_ context.Context, version string) (*Node, error) {
+func (n *Node) WithVersion(version string) *Node {
 	n.Version = version
 
-	return n, nil
+	return n
 }
 
-func (n *Node) Container(_ context.Context) (*Container, error) {
+func (n *Node) Container() *Container {
 	version := "latest"
 	if n.Version != "" {
 		version = n.Version
@@ -26,7 +26,7 @@ func (n *Node) Container(_ context.Context) (*Container, error) {
 		From(fmt.Sprintf("node:%s", version)).
 		WithEntrypoint([]string{"node"})
 
-	return ctr, nil
+	return ctr
 }
 
 // NodeCache adds node_modules into dagger cache.
