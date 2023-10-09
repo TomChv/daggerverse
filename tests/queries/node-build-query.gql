@@ -4,7 +4,11 @@ query install ($dirID: DirectoryID!) {
             withYarn {
                 withSource(source: $dirID) {
                     build {
-                        entries
+                        container {
+                            directory(path: "dist") {
+                                entries
+                            }
+                        }
                     }
                 }
             }
